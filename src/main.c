@@ -22,37 +22,27 @@ int main(int argc, char *argv[]) {
 	int opt_res = getopt_long(argc, argv, "", LongOptions, 0);
 	while(opt_res != -1)
 		opt_res = getopt_long(argc, argv, "", LongOptions, 0);
-	switch(Mode) {
-		case "std":
-			run_std();
+	if(Mode=="std")
+		run_std();
+	else if(Mode=="child")
+		run_child();
+	else if(Mode=="posix") {
+		if(PosixNum == 0) {
+			fprintf(stderr,"Не задано количество сигналов POSIX --num=VALUE\n");
 			break;
-		case "child":
-			run_child();
-			break;
-		case "posix":
-			if(PosixNum == 0) {
-				fprintf(stderr,"Не задано количество сигналов POSIX --num=VALUE\n");
-				break;
-			}
-			run_posix(PosixNum);
-			break;
-		case "kill":
-			if(!SigPID) {
-				fprintf(stderr,"Не указан процесс --pid=VALUE\n");
-				break;
-			}
-			if(!SigName) {
-				fprintf(stderr,"Не указан вид сигнала --signal=VALUE\n");
-				break;
-			}
-			run_kill(SigName, SigPID);
-			break;
-		case "pipe":
-			run_pipe();
-			break;
-		default:
-			fprintf(stderr, "Неверно задан --mode=ARG\n");
-			break;
+		}
+		run_posix(PosixNum);
 	}
+	else if(Mode=="kill"){
+		if(!SigPID)
+			fprintf(stderr,"Не указан процесс --pid=VALUE\n");
+		if(!SigName)
+			fprintf(stderr,"Не указан вид сигнала --signal=VALUE\n");
+		run_kill(SigName, SigPID);
+	}
+	else if(Mode=="pipe")
+		run_pipe();
+	else
+		fprintf(stderr, "Неверно задан --mode=ARG\n");
 	return 0;
 }
