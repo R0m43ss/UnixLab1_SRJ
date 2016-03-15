@@ -10,7 +10,7 @@ void run_pipe() {}
 
 void pipe_handler(int signum, siginfo_t *siginfo, void *context) {
 	if(signum==SIGPIPE)
-		fprintf("Принят сигнал SIGPIPE");
+		printf("Принят сигнал SIGPIPE");
 	else
-		fprintf("Принят неопознанный сигнал");
+		printf("Принят неопознанный сигнал");
 }

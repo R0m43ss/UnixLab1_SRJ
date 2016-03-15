@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <string.h>
 
 char *Mode = NULL;
 int PosixNum = 0;
@@ -11,38 +12,45 @@ int SigName = 0;
 pid_t SigPID = 0;
 
 const struct option LongOptions[] = {
-	{"mode", 1, &Mode, optarg},
-	{"num", 1, &PosixNum, atoi(optarg)},
-	{"signal", 1, &SigName, atoi(optarg)},
-	{"pid", 1, &SigPID, atoi(optarg)},
-	{NULL, 0, NULL, 0}
+	{"mode", 1, 0, 0},
+	{"num", 1, 0, 0},
+	{"signal", 0, 0},
+	{"pid", 1, 0, 0},
 }
 
 int main(int argc, char *argv[]) {
-	int opt_res = getopt_long(argc, argv, "", LongOptions, 0);
-	while(opt_res != -1)
-		opt_res = getopt_long(argc, argv, "", LongOptions, 0);
-	if(Mode=="std")
+	int LongI = 0;
+	int opt_res = getopt_long(argc, argv, "", LongOptions, &LongI);
+	while(opt_res != -1) {
+		if(LongOptions[LongI].name=="mode")
+			Mode = optarg;
+		else if(LongOptions[LongI].name=="num")
+			PosixNum = atoi(optarg);
+		else if(LongOptions[LongI].name=="sig")
+			SigName = atoi(optarg);
+		else if(LongOptions[LongI].name=="pid")
+			sigPID = atoi(optarg);
+		opt_res = getopt_long(argc, argv, "", LongOptions, &LongI);
+	}
+	if(strcmp(Mode,"std")==0)
 		run_std();
-	else if(Mode=="child")
+	else if(strcmp(Mode,"child")==0)
 		run_child();
-	else if(Mode=="posix") {
+	else if(strcmp(Mode,"posix")==0) {
 		if(PosixNum == 0)
-			fprintf(stderr,"Не задано количество сигналов POSIX --num=VALUE\n");
+			printf(stderr,"Не задано количество сигналов POSIX --num=VALUE\n");
 		else
 			run_posix(PosixNum);
 	}
-	else if(Mode=="kill"){
-		if(!SigPID)
-			fprintf(stderr,"Не указан процесс --pid=VALUE\n");
-		else if(!SigName)
-			fprintf(stderr,"Не указан вид сигнала --signal=VALUE\n");
+	else if(strcmp(Mode,"kill")==0) {
+		if(!SigPID || !SigName)
+			printf(stderr,"Не указан процесс --pid=VALUE и(или) вид сигнала --signal=VALUE\n");
 		else
 			run_kill(SigName, SigPID);
 	}
-	else if(Mode=="pipe")
+	else if(strcmp(Mode,"pipe")==0)
 		run_pipe();
 	else
-		fprintf(stderr, "Неверно задан --mode=ARG\n");
+		printf(stderr, "Неверно задан --mode=ARG\n");
 	return 0;
 }

@@ -8,11 +8,11 @@ sigact.sa_flags = SA_SIGINFO;
 
 void run_std() {
 	if(sigaction(SIGUSR1, sigact, NULL) == -1)
-		fprintf("Ошибка при обработке сигнала SIGUSR1");
+		printf("Ошибка при обработке сигнала SIGUSR1");
 	if(sigaction(SIGUSR2, sigact, NULL) == -1)
-		fprintf("Ошибка при обработке сигнала SIGUSR1");
+		printf("Ошибка при обработке сигнала SIGUSR1");
 	if(sigaction(SIGHUP, sigact, NULL) == -1)
-		fprintf("Ошибка при обработке сигнала SIGUSR1");
+		printf("Ошибка при обработке сигнала SIGUSR1");
 }
 
 void std_handler(int signum, siginfo_t *siginfo, void *context) {
@@ -24,7 +24,7 @@ void std_handler(int signum, siginfo_t *siginfo, void *context) {
 	else if(signum == SIGHUP)
 		sig_name = "SIGHUP";
 	if(sig_name == NULL)
-		fprintf("Принят неопознанный сигнал: %d\n", signum);
+		printf("Принят неопознанный сигнал: %d\n", signum);
 	else
-		fprintf("Принят сигнал %s, PID = %i, GID = %i\n", sig_name, siginfo->si_pid, getpgid(siginfo->si_pid));
+		printf("Принят сигнал %s, PID = %i, GID = %i\n", sig_name, siginfo->si_pid, getpgid(siginfo->si_pid));
 }
