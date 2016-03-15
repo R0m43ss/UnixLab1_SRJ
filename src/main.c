@@ -27,18 +27,18 @@ int main(int argc, char *argv[]) {
 	else if(Mode=="child")
 		run_child();
 	else if(Mode=="posix") {
-		if(PosixNum == 0) {
+		if(PosixNum == 0)
 			fprintf(stderr,"Не задано количество сигналов POSIX --num=VALUE\n");
-			break;
-		}
-		run_posix(PosixNum);
+		else
+			run_posix(PosixNum);
 	}
 	else if(Mode=="kill"){
 		if(!SigPID)
 			fprintf(stderr,"Не указан процесс --pid=VALUE\n");
-		if(!SigName)
+		else if(!SigName)
 			fprintf(stderr,"Не указан вид сигнала --signal=VALUE\n");
-		run_kill(SigName, SigPID);
+		else
+			run_kill(SigName, SigPID);
 	}
 	else if(Mode=="pipe")
 		run_pipe();
