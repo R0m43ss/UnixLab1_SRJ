@@ -14,9 +14,9 @@ pid_t SigPID = 0;
 const struct option LongOptions[] = {
 	{"mode", 1, 0, 0},
 	{"num", 1, 0, 0},
-	{"signal", 0, 0},
+	{"sig", 0, 0},
 	{"pid", 1, 0, 0},
-}
+};
 
 int main(int argc, char *argv[]) {
 	int LongI = 0;
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 		else if(LongOptions[LongI].name=="sig")
 			SigName = atoi(optarg);
 		else if(LongOptions[LongI].name=="pid")
-			sigPID = atoi(optarg);
+			SigPID = atoi(optarg);
 		opt_res = getopt_long(argc, argv, "", LongOptions, &LongI);
 	}
 	if(strcmp(Mode,"std")==0)
@@ -38,19 +38,19 @@ int main(int argc, char *argv[]) {
 		run_child();
 	else if(strcmp(Mode,"posix")==0) {
 		if(PosixNum == 0)
-			printf(stderr,"Не задано количество сигналов POSIX --num=VALUE\n");
+			printf("Не задано количество сигналов POSIX --num=VALUE\n");
 		else
 			run_posix(PosixNum);
 	}
 	else if(strcmp(Mode,"kill")==0) {
 		if(!SigPID || !SigName)
-			printf(stderr,"Не указан процесс --pid=VALUE и(или) вид сигнала --signal=VALUE\n");
+			printf("Не указан процесс --pid=VALUE и(или) вид сигнала --sig=VALUE\n");
 		else
 			run_kill(SigName, SigPID);
 	}
 	else if(strcmp(Mode,"pipe")==0)
 		run_pipe();
 	else
-		printf(stderr, "Неверно задан --mode=ARG\n");
+		printf("Неверно задан --mode=ARG\n");
 	return 0;
 }

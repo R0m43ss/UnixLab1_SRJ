@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <errno.h>
+#include <stdlib.h>
 
 struct sigaction sigact;
 int count=0;
