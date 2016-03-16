@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
+#include <errno.h>
 
 struct sigaction sigact;
 
@@ -21,24 +22,27 @@ void child_handler(int signum, siginfo_t *siginfo, void *context) {
 }
 
 void run_child() {
-	printf("Обработка сигнала SIGCHLD\n");
 	sigact.sa_sigaction = &child_handler;
 	sigact.sa_flags = SA_SIGINFO;
 	pid_t Child = fork();
 	if(Child < 0)
-		printf("Ошибка при порождении процесса\n");
+		perror("Ошибка при порождении процесса: ");
 	else if(Child == 0) {
-		printf("Процесс-потомок: Я родился=)\n");
+		printf("Потомок: Я родился:)\n");
 		printf("Пора на боковую\n");
 		sleep(3);
 		printf("Я проснулся:)\n");
 	}
 	else if(Child > 0) {
-		printf("Процесс-родитель\n");
-		if(sigaction(SIGCHLD, &sigact, NULL) == -1)
-			printf("Ошибка при обработке сигнала SIGCHLD\n");
+		if(sigaction(SIGCHLD, &sigact, NULL) == -1) {
+			perror("Ошибка при обработке сигнала SIGCHLD: ");
+			exit(EXIT_FAILURE);
+		}
 		int status;
-		if(wait(&status)<0)
+		if(wait(&status)<=0) {
 			printf("Дети-зомби атакуют!!!\n");
+			exit(EXIT_FAILURE);
+		}
+		else exit(EXIT_SUCCESS);
 	}
 }

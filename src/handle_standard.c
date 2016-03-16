@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <errno.h>
 
 struct sigaction sigact;
 
@@ -21,13 +22,24 @@ void std_handler(int signum, siginfo_t *siginfo, void *context) {
 }
 
 void run_std() {
-	printf("Обработка стандартных сигналов\n");
 	sigact.sa_sigaction = &std_handler;
 	sigact.sa_flags = SA_SIGINFO;
-	if(sigaction(SIGUSR1, &sigact, NULL) == -1)
-		printf("Ошибка при обработке сигнала SIGUSR1");
-	if(sigaction(SIGUSR2, &sigact, NULL) == -1)
-		printf("Ошибка при обработке сигнала SIGUSR2");
-	if(sigaction(SIGHUP, &sigact, NULL) == -1)
-		printf("Ошибка при обработке сигнала SIGHUP");
+	if(sigaction(SIGUSR1, &sigact, NULL) == -1) {
+		perror("Ошибка при обработке сигнала SIGUSR1: ");
+		exit(EXIT_FAILURE);
+	}
+	if(sigaction(SIGUSR2, &sigact, NULL) == -1) {
+		perror("Ошибка при обработке сигнала SIGUSR2: ");
+		exit(EXIT_FAILURE);
+	}
+	if(sigaction(SIGHUP, &sigact, NULL) == -1) {
+		perror("Ошибка при обработке сигнала SIGHUP: ");
+		exit(EXIT_FAILURE);
+	}
+	sleep(2);
+	raise(SIGUSR1);
+	sleep(2);
+	raise(SIGUSR2);
+	sleep(2);
+	raise(SIGHUP);
 }
