@@ -31,7 +31,7 @@ void run_child() {
 		printf("Процесс-потомок: Я родился=)\n");
 		printf("Пора на боковую\n");
 		sleep(3);
-		printf("Я проснулся:)");
+		printf("Я проснулся:)\n");
 	}
 	else if(Child > 0) {
 		printf("Процесс-родитель\n");
@@ -39,6 +39,6 @@ void run_child() {
 			printf("Ошибка при обработке сигнала SIGCHLD\n");
 		int status;
 		if(wait(&status)<0)
-			printf("Дети-зомби атакуют!!!");
+			printf("Дети-зомби атакуют!!!\n");
 	}
 }
