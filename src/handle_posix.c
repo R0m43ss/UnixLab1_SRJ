@@ -20,13 +20,13 @@ void run_posix(int Num) {
 	for(j=SIGRTMIN;j<SIGRTMAX+1;j++) {
 		if(sigaction(j,&sigact,NULL)==-1)
 		{
-			perror("Ошибка обработки POSIX сигнала: ");
+			perror("Ошибка обработки POSIX сигнала");
 			exit(EXIT_FAILURE);
 		}
 	}
 	pid_t Child = fork();
 	if(Child < 0)
-		perror("Ошибка при порождении процесса: ");
+		perror("Ошибка при порождении процесса");
 	else if(Child == 0) {
 		int i=0;
 		for(i=0;i<Num;i++) {
@@ -40,7 +40,7 @@ void run_posix(int Num) {
 	}
 	else if(Child > 0) {
 		int status;
-		if(wait(&status)<=0) {
+		if(waitpid(-1,&status,0)<0) {
 			printf("Дети-зомби атакуют!!!\n");
 			exit(EXIT_FAILURE);
 		}

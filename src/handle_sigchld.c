@@ -7,6 +7,7 @@
 #include <errno.h>
 
 struct sigaction sigact;
+int sleep_time;
 
 void child_handler(int signum, siginfo_t *siginfo, void *context) {
 	if(signum == SIGCHLD) {
@@ -26,20 +27,22 @@ void run_child() {
 	sigact.sa_flags = SA_SIGINFO;
 	pid_t Child = fork();
 	if(Child < 0)
-		perror("Ошибка при порождении процесса: ");
+		perror("Ошибка при порождении процесса");
 	else if(Child == 0) {
 		printf("Потомок: Я родился:)\n");
-		printf("Пора на боковую\n");
-		sleep(3);
+		srand(time(NULL));
+		sleep_time=rand()%5+1;
+		printf("Пора на боковую. Разбудите через %i\n",sleep_time);
+		sleep(sleep_time);
 		printf("Я проснулся:)\n");
 	}
 	else if(Child > 0) {
 		if(sigaction(SIGCHLD, &sigact, NULL) == -1) {
-			perror("Ошибка при обработке сигнала SIGCHLD: ");
+			perror("Ошибка при обработке сигнала SIGCHLD");
 			exit(EXIT_FAILURE);
 		}
 		int status;
-		if(wait(&status)<=0) {
+		if(waitpid(-1,&status,0)<0) {
 			printf("Дети-зомби атакуют!!!\n");
 			exit(EXIT_FAILURE);
 		}

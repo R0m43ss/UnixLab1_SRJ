@@ -1,8 +1,9 @@
 #include "unixlab1.h"
 #include <signal.h>
 #include <stdio.h>
+#include <errno.h>
 
 void run_kill(int Signal, pid_t PID) {
-	kill(PID, Signal);
-	printf("Процессу %i был послан сигнал %i\n", PID, Signal);
+	if(kill(PID, Signal)<0)
+		perror("Ошибка отправки сигнала");
 }

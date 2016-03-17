@@ -25,15 +25,15 @@ void run_std() {
 	sigact.sa_sigaction = &std_handler;
 	sigact.sa_flags = SA_SIGINFO;
 	if(sigaction(SIGUSR1, &sigact, NULL) == -1) {
-		perror("Ошибка при обработке сигнала SIGUSR1: ");
+		perror("Ошибка при обработке сигнала SIGUSR1");
 		exit(EXIT_FAILURE);
 	}
 	if(sigaction(SIGUSR2, &sigact, NULL) == -1) {
-		perror("Ошибка при обработке сигнала SIGUSR2: ");
+		perror("Ошибка при обработке сигнала SIGUSR2");
 		exit(EXIT_FAILURE);
 	}
 	if(sigaction(SIGHUP, &sigact, NULL) == -1) {
-		perror("Ошибка при обработке сигнала SIGHUP: ");
+		perror("Ошибка при обработке сигнала SIGHUP");
 		exit(EXIT_FAILURE);
 	}
 	sleep(2);
