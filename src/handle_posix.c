@@ -17,6 +17,9 @@ void posix_handler(int signum, siginfo_t *siginfo, void *context) {
 void run_posix(int Num) {
 	sigact.sa_sigaction = &posix_handler;
 	sigact.sa_flags = SA_SIGINFO;
+	sigset_t set;
+	sigfillset(&set);
+	sigprocmask(SIG_BLOCK, &set, NULL);
 	int j=0;
 	for(j=SIGRTMIN;j<SIGRTMAX+1;j++) {
 		if(sigaction(j,&sigact,NULL)==-1) {
