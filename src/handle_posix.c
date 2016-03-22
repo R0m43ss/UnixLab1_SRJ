@@ -17,9 +17,15 @@ void posix_handler(int signum, siginfo_t *siginfo, void *context) {
 void run_posix(int Num) {
 	sigact.sa_sigaction = &posix_handler;
 	sigact.sa_flags = SA_SIGINFO;
-	sigset_t set;
-	sigfillset(&set);
-	sigprocmask(SIG_BLOCK, &set, NULL);
+	sigset_t sigset;
+	if(sigfillset(&sigset)<0) {
+		perror("Ошибка sigfillset");
+		exit(EXIT_FAILURE);
+	}
+	if(sigprocmask(SIG_BLOCK, &sigset, NULL)<0) {
+		perror("Ошибка sigprocmask");
+		exit(EXIT_FAILURE);
+	}
 	int j=0;
 	for(j=SIGRTMIN;j<SIGRTMAX+1;j++) {
 		if(sigaction(j,&sigact,NULL)==-1) {
@@ -47,6 +53,12 @@ void run_posix(int Num) {
 			printf("Дети-зомби атакуют!!!\n");
 			exit(EXIT_FAILURE);
 		}
-		else exit(EXIT_SUCCESS);
+		else {
+			if(sigprocmask(SIG_UNBLOCK, &sigset, NULL)<0) {
+				perror("Ошибка sigprocmask");
+				exit(EXIT_FAILURE);
+			}
+			exit(EXIT_SUCCESS);
+		}
 	}
 }
