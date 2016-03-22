@@ -4,6 +4,7 @@
 #include <time.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 
 struct sigaction sigact;
 int count=0;
