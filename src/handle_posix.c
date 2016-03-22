@@ -9,7 +9,7 @@ struct sigaction sigact;
 int count=0;
 
 void posix_handler(int signum, siginfo_t *siginfo, void *context) {
-	printf("Parent: %i|PID=%i|Parent=%i|POSIX signal=%i|Value=%i\n",count,getpid(),getppid(),signum,siginfo->si_value.sival_int);
+	printf("Parent: %i|PID=%i|Parent=%i|POSIX signal=%i|Value=%i\n",count+1,getpid(),getppid(),signum,siginfo->si_value.sival_int);
 	count++;
 }
 
@@ -34,7 +34,7 @@ void run_posix(int Num) {
 			union sigval val;
 			val.sival_int = rand();
 			sigqueue(getppid(),sig,val);
-			printf("Child: %i|PID=%i|Parent=%i|POSIX signal=%i|Value=%i\n",i,getpid(),getppid(),sig,val.sival_int);
+			printf("Child: %i|PID=%i|Parent=%i|POSIX signal=%i|Value=%i\n",i+1,getpid(),getppid(),sig,val.sival_int);
 		}
 	}
 	else if(Child > 0) {

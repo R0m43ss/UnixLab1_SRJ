@@ -14,7 +14,7 @@ pid_t SigPID = 0;
 const struct option LongOptions[] = {
 	{"mode", 1, 0, 0},
 	{"num", 1, 0, 0},
-	{"sig", 0, 0},
+	{"sig", 1, 0, 0},
 	{"pid", 1, 0, 0}
 };
 
