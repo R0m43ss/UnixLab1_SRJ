@@ -43,7 +43,10 @@ void run_posix(int Num) {
 			int sig = rand() % (SIGRTMAX-SIGRTMIN+1) + SIGRTMIN;
 			union sigval val;
 			val.sival_int = rand();
-			sigqueue(getppid(),sig,val);
+			if(sigqueue(getppid(),sig,val)<0) {
+				perror("Ошибка при отправке сигнала");
+				exit(EXIT_FAILURE);
+			}
 			printf("Child: %i|PID=%i|Parent=%i|POSIX signal=%i|Value=%i\n",i+1,getpid(),getppid(),sig,val.sival_int);
 		}
 	}
