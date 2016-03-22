@@ -36,10 +36,13 @@ void run_std() {
 		perror("Ошибка при обработке сигнала SIGHUP");
 		exit(EXIT_FAILURE);
 	}
-	sleep(2);
+	/*sleep(2);
 	raise(SIGUSR1);
 	sleep(2);
 	raise(SIGUSR2);
 	sleep(2);
-	raise(SIGHUP);
+	raise(SIGHUP);*/
+	while(1) {
+		sleep(1); 
+	}
 }

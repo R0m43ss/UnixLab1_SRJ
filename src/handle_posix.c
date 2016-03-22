@@ -18,8 +18,7 @@ void run_posix(int Num) {
 	sigact.sa_flags = SA_SIGINFO;
 	int j=0;
 	for(j=SIGRTMIN;j<SIGRTMAX+1;j++) {
-		if(sigaction(j,&sigact,NULL)==-1)
-		{
+		if(sigaction(j,&sigact,NULL)==-1) {
 			perror("Ошибка обработки POSIX сигнала");
 			exit(EXIT_FAILURE);
 		}

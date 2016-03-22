@@ -9,9 +9,9 @@ struct sigaction sigact;
 
 void pipe_handler(int signum, siginfo_t *siginfo, void *context) {
 	if(signum==SIGPIPE)
-		printf("Принят сигнал SIGPIPE\n");
+		printf("Принят сигнал SIGPIPE, PID = %i, GID = %i\n", siginfo->si_pid, getpgid(siginfo->si_pid));
 	else
-		printf("Принят неопознанный сигнал\n");
+		printf("Принят неопознанный сигнал: %d\n", signum);
 }
 
 void run_pipe() {
@@ -35,7 +35,7 @@ void run_pipe() {
 		else if(Child > 0) {
 			close(filedes[0]);
 			sleep(2);
-			write(filedes[1],"smth",4);
+			write(filedes[1],"Check",5);
 			int status;
 			if(waitpid(-1,&status,0)<0) {
 				printf("Дети-зомби атакуют!!!\n");
@@ -43,5 +43,8 @@ void run_pipe() {
 			}
 			else exit(EXIT_SUCCESS);
 		}
-	} 
+	}
+	while(1) {
+		sleep(1); 
+	}
 }
