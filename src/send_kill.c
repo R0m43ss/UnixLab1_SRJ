@@ -5,5 +5,5 @@
 
 void run_kill(int Signal, pid_t PID) {
 	if(kill(PID, Signal)<0)
-		perror("Ошибка отправки сигнала");
+		perror("Ошибка при отправке сигнала");
 }

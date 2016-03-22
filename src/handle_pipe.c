@@ -19,7 +19,7 @@ void run_pipe() {
 	sigact.sa_flags = SA_SIGINFO;
 	int filedes[2];
 	if(sigaction(SIGPIPE,&sigact,NULL)==-1) {
-		perror("Ошибка обработки сигнала");
+		perror("Ошибка при обработке сигнала SIGPIPE");
 		exit(EXIT_FAILURE);
 	}
 	if(pipe(filedes)<0)
